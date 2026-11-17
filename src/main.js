@@ -51,13 +51,10 @@ function drawMoon(date){
  moon.append(el('polygon',{points:lit.map(p=>p.join(',')).join(' '),fill:'#f7edcf'}));
  moon.append(el('circle',{cx:mx,cy:my,r:moonR,fill:'none',stroke:'#584734','stroke-width':1}));
  
- // Sun is external to the Earth-Moon system, with fixed light direction.
- moon.append(el('text',{x:292,y:27,'text-anchor':'middle','font-size':27,fill:'#8a3026','font-family':'Georgia, serif'},'☉'));
- moon.append(el('text',{x:292,y:44,'text-anchor':'middle','font-size':10,fill:'#594831','letter-spacing':1},'SUN'));
- for(const y of [63,79,95]){
-  moon.append(el('line',{x1:310,y1:y,x2:249,y2:y,stroke:'#8a3026','stroke-width':1.6,'stroke-linecap':'round'}));
-  moon.append(el('polygon',{points:`249,${y} 257,${y-4} 257,${y+4}`,fill:'#8a3026'}));
- }
+ // Fixed Sun, horizontally aligned with Earth's center.
+ // The Moon's sunward hemisphere remains illuminated in the top-down view.
+ moon.append(el('text',{x:293,y:ey+11,'text-anchor':'middle','font-size':37,fill:'#8a3026','font-family':'Georgia, serif'},'☉'));
+ moon.append(el('text',{x:293,y:ey+30,'text-anchor':'middle','font-size':10,fill:'#594831','letter-spacing':1},'SUN'));
 
  // Separate observer's view: the Moon as seen from Earth.
  const px=276,py=167,r=24,steps=96,side=f<.5?1:-1,q=Math.cos(2*Math.PI*f);

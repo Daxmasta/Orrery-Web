@@ -1,4 +1,4 @@
-import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.3.4';
+import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.4.0';
 const NS='http://www.w3.org/2000/svg';
 const el=(name,attrs={},content='')=>{const n=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(content)n.textContent=content;return n};
 const svg=document.getElementById('orrery'),moon=document.getElementById('moon'),dateInput=document.getElementById('date-input');
@@ -7,19 +7,21 @@ dateInput.value=nowDate();
 const safeDate=()=>{const d=new Date(dateInput.value+'T12:00:00Z');return Number.isNaN(d.getTime())?new Date():d};
 function drawOrrery(date){
  svg.replaceChildren();
- const cx=410,cy=267,rx=[39,66,94,125,161,202,246,289],tilt=.70;
- svg.append(el('line',{x1:36,y1:cy,x2:784,y2:cy,stroke:'#b5a17f','stroke-width':1,'stroke-dasharray':'3 6'}));
- svg.append(el('line',{x1:cx,y1:18,x2:cx,y2:516,stroke:'#b5a17f','stroke-width':1,'stroke-dasharray':'3 6'}));
+ // Expanded schematic radii leave room for glyphs centered in each disc.
+ const cx=500,cy=325,rx=[52,94,140,190,245,305,370,432],tilt=.64;
+ svg.append(el('line',{x1:32,y1:cy,x2:968,y2:cy,stroke:'#b5a17f','stroke-width':1,'stroke-dasharray':'3 6'}));
+ svg.append(el('line',{x1:cx,y1:18,x2:cx,y2:632,stroke:'#b5a17f','stroke-width':1,'stroke-dasharray':'3 6'}));
  planets.forEach((p,i)=>svg.append(el('ellipse',{cx,cy,rx:rx[i],ry:rx[i]*tilt,fill:'none',stroke:i===2?'#8a3026':'#a18c61','stroke-width':i===2?1.5:1})));
- svg.append(el('circle',{cx,cy,r:13,fill:'#b38a48',stroke:'#5c4936','stroke-width':2}));
- svg.append(el('text',{x:cx,y:cy+4,'text-anchor':'middle','font-size':13,fill:'#382e25'},'☉'));
+ svg.append(el('circle',{cx,cy,r:20,fill:'#b38a48',stroke:'#5c4936','stroke-width':2}));
+ svg.append(el('text',{x:cx,y:cy+1,'text-anchor':'middle','dominant-baseline':'middle','font-size':24,fill:'#382e25','font-family':'Georgia, serif'},'☉'));
  planets.forEach((p,i)=>{
   const pos=heliocentric(date,p),a=pos.angle,x=cx+rx[i]*Math.cos(a),y=cy-rx[i]*tilt*Math.sin(a);
-  svg.append(el('circle',{cx:x,cy:y,r:i===2?6:4.7,fill:i===2?'#8a3026':'#584734',stroke:'#eadfca','stroke-width':1.5}));
-  const offset=(i%2===0)?-11:18;
-  const label=el('text',{x:x+8,y:y+offset,'font-size':15,fill:'#382e25','font-family':'Georgia, serif'},p.symbol);
-  const title=el('title',{},p.name+' · '+pos.distance.toFixed(2)+' AU from Sun');
-  label.append(title);svg.append(label);
+  const earth=i===2, radius=earth?15:14;
+  const disc=el('g');
+  disc.append(el('circle',{cx:x,cy:y,r:radius,fill:earth?'#8a3026':'#584734',stroke:'#eadfca','stroke-width':1.5}));
+  disc.append(el('text',{x,y:y+0.5,'text-anchor':'middle','dominant-baseline':'central','font-size':19,fill:earth?'#f7edcf':'#eadfca','font-family':'Georgia, serif','pointer-events':'none'},p.symbol));
+  disc.append(el('title',{},p.name+' · '+pos.distance.toFixed(2)+' AU from Sun'));
+  svg.append(disc);
  });
  svg.append(el('text',{x:36,y:35,'font-size':12,fill:'#6c563d','letter-spacing':2},'HELIOCENTRIC · ECLIPTIC'));
  svg.append(el('text',{x:36,y:52,'font-size':11,fill:'#765a3c'},date.toISOString().slice(0,10)+' · 12:00 UTC'));

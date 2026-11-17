@@ -25,3 +25,7 @@ GitHub Actions publishes the repository to GitHub Pages. In repository Settings 
 Expected URL: https://daxmasta.github.io/Orrery-Web/
 
 The main launcher is https://daxmasta.github.io/Mini-Apps/.
+
+## AI Disclosure
+
+This project was developed with the assistance of OpenAI's ChatGPT, including contributions to code generation, interface design, and debugging.

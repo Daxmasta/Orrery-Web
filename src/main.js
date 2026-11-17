@@ -1,4 +1,4 @@
-import {planets,heliocentric,lunarPhase} from './astronomy.js';
+import {planets,heliocentric,lunarPhase} from './astronomy.js?v=20261117-3';
 const NS='http://www.w3.org/2000/svg';
 const el=(name,attrs={},content='')=>{const n=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(content)n.textContent=content;return n};
 const svg=document.getElementById('orrery'),moon=document.getElementById('moon'),dateInput=document.getElementById('date-input');

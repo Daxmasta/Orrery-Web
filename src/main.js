@@ -1,4 +1,4 @@
-import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.3.2';
+import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.3.3';
 const NS='http://www.w3.org/2000/svg';
 const el=(name,attrs={},content='')=>{const n=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(content)n.textContent=content;return n};
 const svg=document.getElementById('orrery'),moon=document.getElementById('moon'),dateInput=document.getElementById('date-input');
@@ -49,10 +49,10 @@ function drawMoon(date){
  const ex=263, ey=64, orbitR=34, moonR=7;
  const theta=2*Math.PI*f;
  const mx=ex+orbitR*Math.cos(theta), my=ey-orbitR*Math.sin(theta);
+ moon.append(el('rect',{x:210,y:2,width:119,height:124,rx:1,fill:'none',stroke:'#a18c61','stroke-width':0.85}));
  moon.append(el('text',{x:263,y:13,'text-anchor':'middle','font-size':10,fill:'#765a3c','letter-spacing':.7},'TOP DOWN'));
  moon.append(el('circle',{cx:ex,cy:ey,r:orbitR,fill:'none',stroke:'#a18c61','stroke-width':1.2,'stroke-dasharray':'3 4'}));
  moon.append(el('circle',{cx:ex,cy:ey,r:11,fill:'#8a3026',stroke:'#584734','stroke-width':1}));
- moon.append(el('text',{x:ex,y:ey+4,'text-anchor':'middle','font-size':9,fill:'#f7edcf'},'⊕'));
  // Half the Moon facing the fixed Sun at the right is lit.
  moon.append(el('circle',{cx:mx,cy:my,r:moonR,fill:'#776b58',stroke:'#584734','stroke-width':.8}));
  const lit=[];

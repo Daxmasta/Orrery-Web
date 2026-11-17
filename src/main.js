@@ -28,36 +28,9 @@ function drawMoon(date){
  const phase=lunarPhase(date), f=phase.fraction;
  moon.replaceChildren();
 
- // Top-down synodic schematic: sunlight enters from the right.
- // The Moon moves counterclockwise around Earth as the phase increases.
- const ex=116, ey=115, orbitR=67, moonR=13;
- const theta=2*Math.PI*f;
- const mx=ex+orbitR*Math.cos(theta), my=ey-orbitR*Math.sin(theta);
-
- moon.append(el('circle',{cx:ex,cy:ey,r:orbitR,fill:'none',stroke:'#a18c61','stroke-width':1.3,'stroke-dasharray':'4 5'}));
- moon.append(el('line',{x1:ex,y1:ey,x2:mx,y2:my,stroke:'#a18c61','stroke-width':1,'stroke-dasharray':'2 5'}));
- moon.append(el('circle',{cx:ex,cy:ey,r:21,fill:'#8a3026',stroke:'#584734','stroke-width':1.5}));
- moon.append(el('text',{x:ex,y:ey+36,'text-anchor':'middle','font-size':11,fill:'#594831'},'EARTH'));
-
- // The near side of the Moon always faces Earth; the illuminated half
- // faces the fixed Sun to the right of this diagram.
- moon.append(el('circle',{cx:mx,cy:my,r:moonR,fill:'#776b58',stroke:'#584734','stroke-width':1}));
- const lit=[];
- for(let i=0;i<=48;i++){
-  const y=-moonR+2*moonR*i/48;
-  lit.push([mx+Math.sqrt(Math.max(0,moonR*moonR-y*y)),my+y]);
- }
- lit.push([mx,my+moonR],[mx,my-moonR]);
- moon.append(el('polygon',{points:lit.map(p=>p.join(',')).join(' '),fill:'#f7edcf'}));
- moon.append(el('circle',{cx:mx,cy:my,r:moonR,fill:'none',stroke:'#584734','stroke-width':1}));
- 
- // Fixed Sun, horizontally aligned with Earth's center.
- // The Moon's sunward hemisphere remains illuminated in the top-down view.
- moon.append(el('text',{x:293,y:ey+11,'text-anchor':'middle','font-size':37,fill:'#8a3026','font-family':'Georgia, serif'},'☉'));
- moon.append(el('text',{x:293,y:ey+30,'text-anchor':'middle','font-size':10,fill:'#594831','letter-spacing':1},'SUN'));
-
- // Separate observer's view: the Moon as seen from Earth.
- const px=276,py=167,r=24,steps=96,side=f<.5?1:-1,q=Math.cos(2*Math.PI*f);
+ // Primary display: the Moon's phase as viewed from Earth.
+ const px=105, py=113, r=62, steps=120;
+ const side=f<0.5?1:-1, q=Math.cos(2*Math.PI*f);
  const pts=[];
  for(let i=0;i<=steps;i++){
   const y=-r+2*r*i/steps;
@@ -67,11 +40,32 @@ function drawMoon(date){
   const y=-r+2*r*i/steps;
   pts.push([px+side*q*Math.sqrt(Math.max(0,r*r-y*y)),py+y]);
  }
- moon.append(el('circle',{cx:px,cy:py,r,fill:'#776b58',stroke:'#584734','stroke-width':1}));
+ moon.append(el('circle',{cx:px,cy:py,r,fill:'#776b58',stroke:'#584734','stroke-width':1.4}));
  moon.append(el('polygon',{points:pts.map(p=>p.join(',')).join(' '),fill:'#f7edcf'}));
- moon.append(el('circle',{cx:px,cy:py,r,fill:'none',stroke:'#584734','stroke-width':1}));
- moon.append(el('text',{x:px,y:205,'text-anchor':'middle','font-size':10,fill:'#594831','letter-spacing':.5},'FROM EARTH'));
- moon.append(el('text',{x:13,y:217,'font-size':10,fill:'#765a3c'},'SCHEMATIC · NOT TO SCALE'));
+ moon.append(el('circle',{cx:px,cy:py,r,fill:'none',stroke:'#584734','stroke-width':1.4}));
+ moon.append(el('text',{x:px,y:197,'text-anchor':'middle','font-size':12,fill:'#594831','letter-spacing':1},'VIEW FROM EARTH'));
+
+ // Auxiliary top-down orbital schematic in the upper right.
+ const ex=263, ey=64, orbitR=34, moonR=7;
+ const theta=2*Math.PI*f;
+ const mx=ex+orbitR*Math.cos(theta), my=ey-orbitR*Math.sin(theta);
+ moon.append(el('text',{x:263,y:13,'text-anchor':'middle','font-size':10,fill:'#765a3c','letter-spacing':.7},'TOP DOWN'));
+ moon.append(el('circle',{cx:ex,cy:ey,r:orbitR,fill:'none',stroke:'#a18c61','stroke-width':1.2,'stroke-dasharray':'3 4'}));
+ moon.append(el('circle',{cx:ex,cy:ey,r:11,fill:'#8a3026',stroke:'#584734','stroke-width':1}));
+ moon.append(el('text',{x:ex,y:ey+4,'text-anchor':'middle','font-size':9,fill:'#f7edcf'},'⊕'));
+ // Half the Moon facing the fixed Sun at the right is lit.
+ moon.append(el('circle',{cx:mx,cy:my,r:moonR,fill:'#776b58',stroke:'#584734','stroke-width':.8}));
+ const lit=[];
+ for(let i=0;i<=32;i++){
+  const y=-moonR+2*moonR*i/32;
+  lit.push([mx+Math.sqrt(Math.max(0,moonR*moonR-y*y)),my+y]);
+ }
+ lit.push([mx,my+moonR],[mx,my-moonR]);
+ moon.append(el('polygon',{points:lit.map(p=>p.join(',')).join(' '),fill:'#f7edcf'}));
+ moon.append(el('circle',{cx:mx,cy:my,r:moonR,fill:'none',stroke:'#584734','stroke-width':.8}));
+ // Fixed Sun outside the orbit, aligned with Earth.
+ moon.append(el('text',{x:317,y:ey+8,'text-anchor':'middle','font-size':27,fill:'#8a3026','font-family':'Georgia, serif'},'☉'));
+ moon.append(el('text',{x:263,y:114,'text-anchor':'middle','font-size':9,fill:'#765a3c'},'NOT TO SCALE'));
  document.getElementById('moon-label').textContent=phase.phaseName;
  document.getElementById('illumination').textContent=Math.round(phase.illumination*100)+'% illuminated · '+phase.age.toFixed(1)+' days since new moon';
 }

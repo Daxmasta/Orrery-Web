@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#e8d8b5"><title>Planetary Orrery</title><link rel="stylesheet" href="./styles.css?v=0.2.1"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#e8d8b5"><title>Planetary Orrery</title><link rel="stylesheet" href="./styles.css?v=0.3.0"></head>
 <body><main class="shell">
 <header><div><p class="eyebrow">ASTRONOMICAL CLOCK · BROWSER EDITION</p><h1>Planetary Orrery</h1><p class="sub">A schematic view of the Solar System, updated from approximate heliocentric orbital elements.</p></div><a class="back" href="https://daxmasta.github.io/Mini-Apps/">← All mini-apps</a></header>
 <section class="instrument" aria-label="Orrery display">
 <div class="orbit-panel"><svg id="orrery" viewBox="0 0 820 540" role="img" aria-label="Schematic orbits and current planetary positions"></svg><div class="scale-note">SCHEMATIC ORBITS · NOT TO SCALE</div></div>
 <aside class="side">
 <div class="clock-box"><p class="eyebrow">LOCAL TIME</p><div id="clock" class="clock">--:--:--</div><div id="date" class="date">Loading…</div><div id="zone" class="zone"></div></div>
-<div class="moon-box"><p class="eyebrow">EARTH · MOON</p><svg id="moon" viewBox="0 0 280 200" role="img" aria-label="Moon illumination and Sun direction"></svg><div id="moon-label" class="moon-label">Lunar phase</div><div id="illumination" class="moon-detail"></div></div>
+<div class="moon-box"><p class="eyebrow">EARTH · MOON</p><svg id="moon" viewBox="0 0 330 225" role="img" aria-label="Top-down Earth-Moon orbit with fixed sunlight and a separate Earth-view lunar phase"></svg><div id="moon-label" class="moon-label">Lunar phase</div><div id="illumination" class="moon-detail"></div></div>
 <div class="controls"><label for="date-input" class="eyebrow">VIEW DATE</label><input id="date-input" type="date"><div class="actions"><button id="today" type="button">Today</button><button id="prev" type="button" aria-label="Previous day">−1 day</button><button id="next" type="button" aria-label="Next day">+1 day</button></div><p class="hint">Positions use the selected date at 12:00 UTC. The clock always shows your local current time.</p></div>
 </aside></section>
-<footer><strong>ORRERY-WEB · v0.2.1</strong> · Planetary longitudes: approximate J2000 Keplerian elements. Lunar phase: synodic approximation. Intended for visualization, not navigation or precision ephemerides.</footer>
-</main><script type="module" src="./src/main.js?v=0.2.1"></script></body></html>
+<footer><strong>ORRERY-WEB · v0.3.0</strong> · Planetary longitudes: approximate J2000 Keplerian elements. Lunar phase: synodic approximation. Intended for visualization, not navigation or precision ephemerides.</footer>
+</main><script type="module" src="./src/main.js?v=0.3.0"></script></body></html>

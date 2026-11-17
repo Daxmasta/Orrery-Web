@@ -27,9 +27,8 @@ function drawOrrery(date){
 function drawMoon(date){
  const phase=lunarPhase(date),f=phase.fraction;
  moon.replaceChildren();
- moon.append(el('circle',{cx:82,cy:102,r:13,fill:'#8a3026'}));
- moon.append(el('text',{x:82,y:143,'text-anchor':'middle','font-size':12,fill:'#594831'},'EARTH'));
- moon.append(el('ellipse',{cx:174,cy:101,rx:71,ry:63,fill:'none',stroke:'#a18c61','stroke-width':1.3,'stroke-dasharray':'4 6'}));
+ moon.append(el('circle',{cx:76,cy:101,r:22,fill:'#8a3026',stroke:'#584734','stroke-width':1.5}));
+ moon.append(el('text',{x:76,y:150,'text-anchor':'middle','font-size':13,fill:'#594831'},'EARTH'));
  // Sunlight comes from the right in the inset; phase shadow is represented by the illuminated shape.
  const c=202,r=35,steps=80;
  const waxing=f<.5;
@@ -42,7 +41,8 @@ function drawMoon(date){
  moon.append(el('circle',{cx:c,cy:101,r,fill:'#776b58',stroke:'#584734','stroke-width':1}));
  moon.append(el('polygon',{points:pts.map(p=>p.join(',')).join(' '),fill:'#f7edcf'}));
  moon.append(el('text',{x:202,y:157,'text-anchor':'middle','font-size':12,fill:'#594831'},'MOON'));
- moon.append(el('text',{x:276,y:25,'text-anchor':'end','font-size':11,fill:'#8a3026'},'☉ SUN →'));
+ moon.append(el('text',{x:243,y:34,'text-anchor':'middle','font-size':28,fill:'#8a3026','font-family':'Georgia, serif'},'☉'));
+ moon.append(el('text',{x:243,y:51,'text-anchor':'middle','font-size':12,fill:'#594831'},'SUN →'));
  document.getElementById('moon-label').textContent=phase.phaseName;
  document.getElementById('illumination').textContent=Math.round(phase.illumination*100)+'% illuminated · '+phase.age.toFixed(1)+' days since new moon';
 }

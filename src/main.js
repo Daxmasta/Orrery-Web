@@ -1,4 +1,4 @@
-import {planets,heliocentric,lunarPhase} from './astronomy.js?v=20261117-3';
+import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.2.0';
 const NS='http://www.w3.org/2000/svg';
 const el=(name,attrs={},content='')=>{const n=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(content)n.textContent=content;return n};
 const svg=document.getElementById('orrery'),moon=document.getElementById('moon'),dateInput=document.getElementById('date-input');
@@ -52,8 +52,24 @@ function drawMoon(date){
  moon.append(el('circle',{cx:c,cy,r,fill:'#776b58',stroke:'#584734','stroke-width':1}));
  moon.append(el('polygon',{points:pts.map(p=>p.join(',')).join(' '),fill:'#f7edcf'}));
  moon.append(el('text',{x:202,y:157,'text-anchor':'middle','font-size':12,fill:'#594831'},'MOON'));
- moon.append(el('text',{x:243,y:34,'text-anchor':'middle','font-size':28,fill:'#8a3026','font-family':'Georgia, serif'},'☉'));
- moon.append(el('text',{x:243,y:51,'text-anchor':'middle','font-size':12,fill:'#594831'},'SUN →'));
+ // Relative Sun direction in the lunar phase schematic:
+ // new = right (Moon between Earth and Sun), first quarter = up,
+ // full = left, last quarter = down. This is not a sky azimuth.
+ const theta=2*Math.PI*f;
+ const dx=Math.cos(theta), dy=-Math.sin(theta);
+ const startR=42, endR=53, sunR=64;
+ const sx=c+sunR*dx, sy=cy+sunR*dy;
+ const ax=c+startR*dx, ay=cy+startR*dy;
+ const bx=c+endR*dx, by=cy+endR*dy;
+ moon.append(el('line',{x1:ax,y1:ay,x2:bx,y2:by,stroke:'#8a3026','stroke-width':2.2,'stroke-linecap':'round'}));
+ // Arrowhead points outward, toward the Sun.
+ const wing=5,back=7;
+ const arrow=[[bx,by],[bx-back*dx-wing*(-dy),by-back*dy-wing*dx],[bx-back*dx+wing*(-dy),by-back*dy+wing*dx]];
+ moon.append(el('polygon',{points:arrow.map(p=>p.join(',')).join(' '),fill:'#8a3026'}));
+ const sun=el('text',{x:sx,y:sy+8,'text-anchor':'middle','font-size':25,fill:'#8a3026','font-family':'Georgia, serif'},'☉');
+ sun.append(el('title',{},'Direction toward the Sun (schematic)'));
+ moon.append(sun);
+ moon.append(el('text',{x:12,y:20,'font-size':11,fill:'#594831','letter-spacing':1},'☉ SUN DIRECTION'));
  document.getElementById('moon-label').textContent=phase.phaseName;
  document.getElementById('illumination').textContent=Math.round(phase.illumination*100)+'% illuminated · '+phase.age.toFixed(1)+' days since new moon';
 }

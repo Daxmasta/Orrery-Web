@@ -1,4 +1,4 @@
-import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.6.1';
+import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.6.2';
 const NS='http://www.w3.org/2000/svg';
 const el=(name,attrs={},content='')=>{const n=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(content)n.textContent=content;return n};
 const svg=document.getElementById('orrery'),moon=document.getElementById('moon'),dateInput=document.getElementById('date-input');
@@ -12,7 +12,7 @@ function drawOrrery(date){
  const cx=900,cy=575,rx=[75,165,255,350,525,635,750,865],tilt=.57;
  svg.append(el('line',{x1:20,y1:cy,x2:1780,y2:cy,stroke:'#b5a17f','stroke-width':1,'stroke-dasharray':'3 6'}));
  svg.append(el('line',{x1:cx,y1:18,x2:cx,y2:1132,stroke:'#b5a17f','stroke-width':1,'stroke-dasharray':'3 6'}));
- planets.forEach((p,i)=>svg.append(el('ellipse',{cx,cy,rx:rx[i],ry:rx[i]*tilt,fill:'none',stroke:i===2?'#8a3026':'#a18c61','stroke-width':i===2?1.5:1})));
+ planets.forEach((p,i)=>svg.append(el('ellipse',{cx,cy,rx:rx[i],ry:rx[i]*tilt,fill:'none',stroke:i===2?'#8a3026':'#a18c61','stroke-width':i===2?2.5:1.8})));
 
  // A continuous dotted belt between Mars and Jupiter.
  const beltR=414, beltWidth=20;
@@ -50,7 +50,7 @@ function drawOrrery(date){
 
  svg.append(el('circle',{cx,cy,r:20,fill:'#b38a48',stroke:'#5c4936','stroke-width':2}));
  svg.append(el('text',{x:cx,y:cy+1,'text-anchor':'middle','dominant-baseline':'middle','font-size':24,fill:'#382e25','font-family':'Georgia, serif'},'☉'));
- const discScale={Mercury:.7,Mars:.8,Venus:.9,Earth:1,Neptune:1.1,Uranus:1.2,Saturn:1.3,Jupiter:1.4};
+ const discScale={Mercury:.85,Mars:.90,Venus:.95,Earth:1,Neptune:1.05,Uranus:1.10,Saturn:1.15,Jupiter:1.20};
  planets.forEach((p,i)=>{
   const pos=heliocentric(date,p),angle=pos.angle,x=cx+rx[i]*Math.cos(angle),y=cy-rx[i]*tilt*Math.sin(angle);
   const earth=p.name==='Earth',scale=discScale[p.name],radius=19.5*scale;

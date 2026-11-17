@@ -1,4 +1,4 @@
-import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.5.0';
+import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.5.1';
 const NS='http://www.w3.org/2000/svg';
 const el=(name,attrs={},content='')=>{const n=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(content)n.textContent=content;return n};
 const svg=document.getElementById('orrery'),moon=document.getElementById('moon'),dateInput=document.getElementById('date-input');
@@ -19,14 +19,14 @@ function drawOrrery(date){
  const discScale={Mercury:.7,Mars:.8,Venus:.9,Earth:1,Neptune:1.1,Uranus:1.2,Saturn:1.3,Jupiter:1.4};
  planets.forEach((p,i)=>{
   const pos=heliocentric(date,p),a=pos.angle,x=cx+rx[i]*Math.cos(a),y=cy-rx[i]*tilt*Math.sin(a);
-  const earth=p.name==='Earth',scale=discScale[p.name],radius=15*scale;
+  const earth=p.name==='Earth',scale=discScale[p.name],radius=19.5*scale;
   const disc=el('g');
   disc.append(el('circle',{cx:x,cy:y,r:radius,fill:earth?'#8a3026':'#584734',stroke:'#eadfca','stroke-width':1.5}));
   // Center by the rendered glyph's measured bounds, not its font baseline.
   // This compensates for different symbol ascenders and descenders.
   const glyph=el('text',{x:0,y:0,'font-size':radius*1.22,fill:earth?'#f7edcf':'#eadfca','font-family':'Georgia, serif','pointer-events':'none'},p.symbol);
   disc.append(glyph);
-  disc.append(el('title',{},p.name+' · '+pos.distance.toFixed(2)+' AU from Sun · '+scale.toFixed(2)+'× disc'));
+  disc.append(el('title',{},p.name));
   svg.append(disc);
   const bounds=glyph.getBBox();
   glyph.setAttribute('transform',`translate(${x-bounds.x-bounds.width/2} ${y-bounds.y-bounds.height/2})`);

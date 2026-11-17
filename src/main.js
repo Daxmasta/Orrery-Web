@@ -1,4 +1,4 @@
-import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.4.0';
+import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.5.0';
 const NS='http://www.w3.org/2000/svg';
 const el=(name,attrs={},content='')=>{const n=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(content)n.textContent=content;return n};
 const svg=document.getElementById('orrery'),moon=document.getElementById('moon'),dateInput=document.getElementById('date-input');
@@ -14,14 +14,22 @@ function drawOrrery(date){
  planets.forEach((p,i)=>svg.append(el('ellipse',{cx,cy,rx:rx[i],ry:rx[i]*tilt,fill:'none',stroke:i===2?'#8a3026':'#a18c61','stroke-width':i===2?1.5:1})));
  svg.append(el('circle',{cx,cy,r:20,fill:'#b38a48',stroke:'#5c4936','stroke-width':2}));
  svg.append(el('text',{x:cx,y:cy+1,'text-anchor':'middle','dominant-baseline':'middle','font-size':24,fill:'#382e25','font-family':'Georgia, serif'},'☉'));
+ // Rank-based visual diameters: Earth = 1.0, adjacent ranks differ by 10%.
+ // These are intentionally not physical diameter ratios.
+ const discScale={Mercury:.7,Mars:.8,Venus:.9,Earth:1,Neptune:1.1,Uranus:1.2,Saturn:1.3,Jupiter:1.4};
  planets.forEach((p,i)=>{
   const pos=heliocentric(date,p),a=pos.angle,x=cx+rx[i]*Math.cos(a),y=cy-rx[i]*tilt*Math.sin(a);
-  const earth=i===2, radius=earth?15:14;
+  const earth=p.name==='Earth',scale=discScale[p.name],radius=15*scale;
   const disc=el('g');
   disc.append(el('circle',{cx:x,cy:y,r:radius,fill:earth?'#8a3026':'#584734',stroke:'#eadfca','stroke-width':1.5}));
-  disc.append(el('text',{x,y:y+0.5,'text-anchor':'middle','dominant-baseline':'central','font-size':19,fill:earth?'#f7edcf':'#eadfca','font-family':'Georgia, serif','pointer-events':'none'},p.symbol));
-  disc.append(el('title',{},p.name+' · '+pos.distance.toFixed(2)+' AU from Sun'));
+  // Center by the rendered glyph's measured bounds, not its font baseline.
+  // This compensates for different symbol ascenders and descenders.
+  const glyph=el('text',{x:0,y:0,'font-size':radius*1.22,fill:earth?'#f7edcf':'#eadfca','font-family':'Georgia, serif','pointer-events':'none'},p.symbol);
+  disc.append(glyph);
+  disc.append(el('title',{},p.name+' · '+pos.distance.toFixed(2)+' AU from Sun · '+scale.toFixed(2)+'× disc'));
   svg.append(disc);
+  const bounds=glyph.getBBox();
+  glyph.setAttribute('transform',`translate(${x-bounds.x-bounds.width/2} ${y-bounds.y-bounds.height/2})`);
  });
  svg.append(el('text',{x:36,y:35,'font-size':12,fill:'#6c563d','letter-spacing':2},'HELIOCENTRIC · ECLIPTIC'));
  svg.append(el('text',{x:36,y:52,'font-size':11,fill:'#765a3c'},date.toISOString().slice(0,10)+' · 12:00 UTC'));

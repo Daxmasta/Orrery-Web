@@ -1,4 +1,4 @@
-import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.6.0';
+import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.6.1';
 const NS='http://www.w3.org/2000/svg';
 const el=(name,attrs={},content='')=>{const n=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(content)n.textContent=content;return n};
 const svg=document.getElementById('orrery'),moon=document.getElementById('moon'),dateInput=document.getElementById('date-input');
@@ -14,27 +14,24 @@ function drawOrrery(date){
  svg.append(el('line',{x1:cx,y1:18,x2:cx,y2:1132,stroke:'#b5a17f','stroke-width':1,'stroke-dasharray':'3 6'}));
  planets.forEach((p,i)=>svg.append(el('ellipse',{cx,cy,rx:rx[i],ry:rx[i]*tilt,fill:'none',stroke:i===2?'#8a3026':'#a18c61','stroke-width':i===2?1.5:1})));
 
- // An engraved, interrupted belt between Mars and Jupiter, not a solid ring.
- // The gap in the lower arc leaves room for its instrument label.
+ // A continuous dotted belt between Mars and Jupiter.
  const beltR=414, beltWidth=20;
  for(let j=0;j<4;j++){
   const r=beltR+(j-1.5)*beltWidth/3;
   for(let k=0;k<180;k++){
    const angle=2*Math.PI*k/180;
-   if(angle>1.17&&angle<1.96)continue;
    const x=cx+r*Math.cos(angle),y=cy-r*tilt*Math.sin(angle);
    const dotR=(k+j*7)%9===0?1.8:0.85;
    svg.append(el('circle',{cx:x,cy:y,r:dotR,fill:'#a18c61',opacity:.7}));
   }
  }
- svg.append(el('text',{x:cx,y:cy+246,'text-anchor':'middle','font-size':15,fill:'#765a3c','letter-spacing':2},'ASTEROID BELT'));
 
  // Approximate asteroid heliocentric longitudes from mean Keplerian elements.
  // Angles and periods are illustrative and not precision ephemerides.
  const asteroidElements=[
-  {name:'1 Ceres',a:2.768,e:.076,meanAnomaly:95.99,perihelion:153.9,period:1681.6,track:407,symbol:'◆'},
-  {name:'2 Pallas',a:2.77,e:.23,meanAnomaly:33.2,perihelion:123.3,period:1686,track:418,symbol:'◇'},
-  {name:'4 Vesta',a:2.362,e:.089,meanAnomaly:20.9,perihelion:254.7,period:1325.8,track:428,symbol:'✦'}
+  {name:'Ceres',a:2.768,e:.076,meanAnomaly:95.99,perihelion:153.9,period:1681.6,track:407,symbol:'◆'},
+  {name:'Pallas',a:2.77,e:.23,meanAnomaly:33.2,perihelion:123.3,period:1686,track:418,symbol:'◇'},
+  {name:'Vesta',a:2.362,e:.089,meanAnomaly:20.9,perihelion:254.7,period:1325.8,track:428,symbol:'✦'}
  ];
  const days=(date.getTime()-Date.UTC(2000,0,1,12))/86400000;
  for(const asteroid of asteroidElements){

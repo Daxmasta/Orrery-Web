@@ -9,9 +9,9 @@ function drawOrrery(date){
  svg.replaceChildren();
  // The view is intentionally schematic. Minimum orbit separation in the
  // compressed vertical direction exceeds the combined marker radii.
- const cx=850,cy=550,rx=[75,165,255,350,480,590,705,825],tilt=.57;
- svg.append(el('line',{x1:20,y1:cy,x2:1680,y2:cy,stroke:'#b5a17f','stroke-width':1,'stroke-dasharray':'3 6'}));
- svg.append(el('line',{x1:cx,y1:18,x2:cx,y2:1082,stroke:'#b5a17f','stroke-width':1,'stroke-dasharray':'3 6'}));
+ const cx=900,cy=575,rx=[75,165,255,350,525,635,750,865],tilt=.57;
+ svg.append(el('line',{x1:20,y1:cy,x2:1780,y2:cy,stroke:'#b5a17f','stroke-width':1,'stroke-dasharray':'3 6'}));
+ svg.append(el('line',{x1:cx,y1:18,x2:cx,y2:1132,stroke:'#b5a17f','stroke-width':1,'stroke-dasharray':'3 6'}));
  planets.forEach((p,i)=>svg.append(el('ellipse',{cx,cy,rx:rx[i],ry:rx[i]*tilt,fill:'none',stroke:i===2?'#8a3026':'#a18c61','stroke-width':i===2?1.5:1})));
 
  // An engraved, interrupted belt between Mars and Jupiter, not a solid ring.

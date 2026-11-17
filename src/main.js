@@ -29,16 +29,27 @@ function drawMoon(date){
  moon.replaceChildren();
  moon.append(el('circle',{cx:76,cy:101,r:22,fill:'#8a3026',stroke:'#584734','stroke-width':1.5}));
  moon.append(el('text',{x:76,y:150,'text-anchor':'middle','font-size':13,fill:'#594831'},'EARTH'));
- // Sunlight comes from the right in the inset; phase shadow is represented by the illuminated shape.
- const c=202,r=35,steps=80;
- const waxing=f<.5;
+ // Draw the visible illuminated region from the phase angle.
+ // New moon: 0% lit; first quarter: right half; full: 100%;
+ // last quarter: left half. The terminator changes continuously.
+ const c=202, cy=101, r=35, steps=120;
+ const waxing=f<0.5;
+ const side=waxing?1:-1;
  const q=Math.cos(2*Math.PI*f);
- // Visible lit region bounded by limb and terminator; crescent/gibbous controlled by q.
- let pts=[];
- const start=waxing?-Math.PI/2:Math.PI/2;
- for(let i=0;i<=steps;i++){const a=start+(waxing?1:-1)*Math.PI*i/steps;pts.push([c+r*Math.cos(a),101+r*Math.sin(a)])}
- for(let i=steps;i>=0;i--){const y=-r+2*r*i/steps;const xx=q*Math.sqrt(Math.max(0,r*r-y*y));pts.push([c+xx,101+y])}
- moon.append(el('circle',{cx:c,cy:101,r,fill:'#776b58',stroke:'#584734','stroke-width':1}));
+ const pts=[];
+ // Traverse the illuminated outer limb from top to bottom.
+ for(let i=0;i<=steps;i++){
+  const y=-r+2*r*i/steps;
+  const x=side*Math.sqrt(Math.max(0,r*r-y*y));
+  pts.push([c+x,cy+y]);
+ }
+ // Return along the terminator from bottom to top.
+ for(let i=steps;i>=0;i--){
+  const y=-r+2*r*i/steps;
+  const x=side*q*Math.sqrt(Math.max(0,r*r-y*y));
+  pts.push([c+x,cy+y]);
+ }
+ moon.append(el('circle',{cx:c,cy,r,fill:'#776b58',stroke:'#584734','stroke-width':1}));
  moon.append(el('polygon',{points:pts.map(p=>p.join(',')).join(' '),fill:'#f7edcf'}));
  moon.append(el('text',{x:202,y:157,'text-anchor':'middle','font-size':12,fill:'#594831'},'MOON'));
  moon.append(el('text',{x:243,y:34,'text-anchor':'middle','font-size':28,fill:'#8a3026','font-family':'Georgia, serif'},'☉'));

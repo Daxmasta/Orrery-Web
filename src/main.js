@@ -1,4 +1,4 @@
-import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.6.2';
+import {planets,heliocentric,lunarPhase} from './astronomy.js?v=0.6.3';
 const NS='http://www.w3.org/2000/svg';
 const el=(name,attrs={},content='')=>{const n=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(content)n.textContent=content;return n};
 const svg=document.getElementById('orrery'),moon=document.getElementById('moon'),dateInput=document.getElementById('date-input');
@@ -56,7 +56,7 @@ function drawOrrery(date){
   const earth=p.name==='Earth',scale=discScale[p.name],radius=19.5*scale;
   const disc=el('g');
   disc.append(el('circle',{cx:x,cy:y,r:radius,fill:earth?'#8a3026':'#584734',stroke:'#eadfca','stroke-width':1.5}));
-  const glyph=el('text',{x:0,y:0,'font-size':radius*1.22,fill:earth?'#f7edcf':'#eadfca','font-family':'Georgia, serif','pointer-events':'none'},p.symbol);
+  const glyph=el('text',{x:0,y:0,'font-size':radius*1.45,fill:earth?'#f7edcf':'#eadfca',stroke:earth?'#f7edcf':'#eadfca','stroke-width':0.75,'paint-order':'stroke fill','stroke-linejoin':'round','font-family':'Georgia, serif','pointer-events':'none'},p.symbol);
   disc.append(glyph);
   disc.append(el('title',{},p.name));
   svg.append(disc);
